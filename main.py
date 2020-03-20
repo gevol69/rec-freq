@@ -1,13 +1,27 @@
+<<<<<<< HEAD
 import tkinter as tk
+=======
+import scipy
+import tkinter as tk
+import tkinter.ttk as ttk
+>>>>>>> Update unload, add sounds, compile Pyinstaller
 from tkinter.filedialog import askdirectory
 from PIL import ImageTk
 import wave
 import sys, os
 from recognition import find_formant
+<<<<<<< HEAD
 import time
 import csv
 import pyaudio
 
+=======
+import time, threading
+import csv
+import pyaudio
+
+global number_file
+>>>>>>> Update unload, add sounds, compile Pyinstaller
 
 class Main(tk.Frame):
     def __init__(self, root):
@@ -20,8 +34,13 @@ class Main(tk.Frame):
 
 
     def centerWindow(self):
+<<<<<<< HEAD
         w = 250
         h = 640
+=======
+        w = 600
+        h = 700
+>>>>>>> Update unload, add sounds, compile Pyinstaller
         sw = self.root.winfo_screenwidth()
         sh = self.root.winfo_screenheight()
         x = (sw - w)/2
@@ -29,7 +48,11 @@ class Main(tk.Frame):
         self.root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
 
+<<<<<<< HEAD
 def write_csv(data, name):
+=======
+def write_csv_all(data, name):
+>>>>>>> Update unload, add sounds, compile Pyinstaller
     os.chdir(default_dir + '\\Results\\' + name)
     with open(name + 'freq.csv', 'a', newline='') as file:
         order = [   
@@ -69,6 +92,48 @@ def write_csv(data, name):
         writer = csv.DictWriter(file, fieldnames=order)
         writer.writerow(data)
 
+<<<<<<< HEAD
+=======
+def write_csv(data, name):
+    with open(name + 'freq.csv', 'a', newline='') as file:
+        order = [   
+                    'number',
+                    'name_file_wav', 
+                    'numb_formant', 
+                    'freq_1_formant', 
+                    'amplitude_1_formant',
+                    'min_1_formant',
+                    'max_1_formant',
+                    'freq_2_formant', 
+                    'amplitude_2_formant',
+                    'min_2_formant',
+                    'max_2_formant',
+                    'freq_3_formant', 
+                    'amplitude_3_formant',
+                    'min_3_formant',
+                    'max_3_formant',
+                    'freq_4_formant', 
+                    'amplitude_4_formant',
+                    'min_4_formant',
+                    'max_4_formant',
+                    'freq_5_formant', 
+                    'amplitude_5_formant',
+                    'min_5_formant',
+                    'max_5_formant',
+                    'freq_6_formant', 
+                    'amplitude_6_formant',
+                    'min_6_formant',
+                    'max_6_formant',
+                    'freq_7_formant', 
+                    'amplitude_7_formant',
+                    'min_7_formant',
+                    'max_7_formant',
+                    'freq_need_formant'
+                ]
+        writer = csv.DictWriter(file, fieldnames=order)
+        writer.writerow(data)
+
+>>>>>>> Update unload, add sounds, compile Pyinstaller
 def click_button():
     recordButton.configure(text='Идет запись', image=image_process, compound='left', font='14')
 
@@ -228,6 +293,7 @@ def deleting_file():
         file_path = dir_folder_file + '\\' + value
         os.remove(file_path)
     listbox_letters.delete(selection[0])
+<<<<<<< HEAD
 
 def unload():
     os.chdir(default_dir)
@@ -239,6 +305,27 @@ def unload():
         letters = ['a', 'e', 'o']
         numbers = ['1 - f', '2 - f', '3 - m', '4 - f', '5 - m', '6 - m', '7 - f']
         path = default_dir + '\\Results\\' + '\\Graphs\\' + '\\' + name + '\\'
+=======
+    global number_file
+    number_file -= 1
+
+def unload_all():
+    os.chdir(default_dir)
+    flag_unload = True
+    name_Exp = ['Exp1', 'Exp2', 'Exp3']
+    mpb["maximum"] = len(name_Exp)
+    for name in name_Exp:
+        try:
+            os.mkdir(default_dir + '\\Results\\' + 'Graphs\\' + name)
+        except:
+            pass
+        os.chdir(default_dir)
+        way_file = os.getcwd() + '\\Results\\' + name + '\\{}\\{}\\{}.wav'
+        letters = ['a', 'e', 'o']
+        numbers = os.listdir(os.getcwd() + '\\Results\\' + name)
+        print(numbers)
+        path = default_dir + '\\Results' + '\\Graphs\\' + name
+>>>>>>> Update unload, add sounds, compile Pyinstaller
         for number in numbers:
             new_path_number = path + '\\' + number
             os.mkdir(new_path_number)
@@ -247,7 +334,12 @@ def unload():
                 new_path_letter = new_path_number + '\\' + letter
                 os.mkdir(new_path_letter)
                 os.chdir(new_path_letter)
+<<<<<<< HEAD
                 for i in range(1, 11):
+=======
+                count_files_wav = len(os.listdir(default_dir + '\\Results\\' + '\\'  + name +'\\'+ number +  '\\' + letter))
+                for i in range(1, count_files_wav + 1):
+>>>>>>> Update unload, add sounds, compile Pyinstaller
                     name_file_wav = letter + str(i)
                     file = way_file.format(number, letter, name_file_wav)
                     print_find_formant = find_formant(file, flag_unload)
@@ -291,8 +383,92 @@ def unload():
                             'max_7_formant': max_freqs[6],
                             'freq_need_formant': freq_need_formant
                         }
+<<<<<<< HEAD
                     write_csv(data, name)
                     os.chdir(new_path_letter)
+=======
+                    write_csv_all(data, name)
+                    os.chdir(new_path_letter)
+        mpb['value'] += 1
+        mpb.update()
+    mpb['value'] = 0
+    os.chdir(default_dir) 
+    root.mainloop()
+ 
+
+def unload():
+    dir_path = askdirectory()
+    flag_unload = True
+    os.chdir(dir_path[:dir_path.rfind('/')])
+    letters = os.listdir(dir_path)
+    name_user = dir_path[dir_path.rfind('/'):][1:]
+    dir_results = os.getcwd() + '\\Results'
+    try:
+        os.mkdir(dir_results)
+    except:
+        pass
+    os.chdir(dir_results)
+    way_file = dir_path + '\\{}\\{}.wav'
+    mpb["maximum"] = len(letters)
+    for letter in letters:
+        count_files_wav = len(os.listdir(dir_path + '\\' + letter))
+        new_path_letter = dir_results + '\\' + name_user + '\\' + letter
+        os.makedirs(new_path_letter)
+        for i in range(1 , count_files_wav + 1):
+            os.chdir(new_path_letter)
+            name_file_wav = letter + str(i)
+            file = way_file.format(letter, name_file_wav)
+            print_find_formant = find_formant(file, flag_unload)
+            min_freqs = print_find_formant[0]
+            max_freqs = print_find_formant[1]
+            freq_need_formant = print_find_formant[2]
+            values_need = print_find_formant[3]
+            freqs = list(values_need.keys())
+            amplitudes = list(values_need.values())
+            data = {
+                    'number' : name_user,
+                    'name_file_wav' : name_file_wav, 
+                    'freq_1_formant' : freqs[0],
+                    'amplitude_1_formant' : amplitudes[0],
+                    'min_1_formant' : min_freqs[0], 
+                    'max_1_formant': max_freqs[0], 
+                    'freq_2_formant' : freqs[1], 
+                    'amplitude_2_formant' : amplitudes[1],
+                    'min_2_formant': min_freqs[1], 
+                    'max_2_formant': max_freqs[1],
+                    'freq_3_formant' : freqs[2], 
+                    'amplitude_3_formant' : amplitudes[2],
+                    'min_3_formant': min_freqs[2], 
+                    'max_3_formant': max_freqs[2],
+                    'freq_4_formant' : freqs[3],
+                    'amplitude_4_formant' : amplitudes[3],
+                    'min_4_formant': min_freqs[3], 
+                    'max_4_formant': max_freqs[3],
+                    'freq_5_formant' : freqs[4], 
+                    'amplitude_5_formant' : amplitudes[4],
+                    'min_5_formant': min_freqs[4], 
+                    'max_5_formant': max_freqs[4],
+                    'freq_6_formant' : freqs[5], 
+                    'amplitude_6_formant' : amplitudes[5],
+                    'min_6_formant': min_freqs[5], 
+                    'max_6_formant': max_freqs[5],
+                    'freq_7_formant' : freqs[6], 
+                    'amplitude_7_formant' : amplitudes[6],
+                    'min_7_formant': min_freqs[6], 
+                    'max_7_formant': max_freqs[6],
+                    'freq_need_formant': freq_need_formant
+                }
+            directory = dir_results + '\\' + name_user
+            os.chdir(directory)
+            write_csv(data, name_user)
+        mpb['value'] += 1
+        mpb.update()
+    mpb['value'] = 0
+    os.chdir(default_dir) 
+    root.mainloop()
+
+
+>>>>>>> Update unload, add sounds, compile Pyinstaller
 
 
 if __name__ == "__main__":
@@ -301,7 +477,10 @@ if __name__ == "__main__":
     flag_unload = False
     global default_dir
     default_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+<<<<<<< HEAD
     global number_file
+=======
+>>>>>>> Update unload, add sounds, compile Pyinstaller
     number_file = 0
     root = tk.Tk()
     app = Main(root)
@@ -312,7 +491,11 @@ if __name__ == "__main__":
     image_process = ImageTk.PhotoImage(file=default_dir + '\\Images\\' + "process.png")
     image_graph = ImageTk.PhotoImage(file=default_dir + '\\Images\\' + "graph.jpg")
     image_new_user = ImageTk.PhotoImage(file=default_dir + '\\Images\\' + "new_user.png")
+<<<<<<< HEAD
     name_label = tk.Label(root, text='Пользователь', font='Arial 12')
+=======
+    name_label = tk.Label(root, text='Директория', font='Arial 12')
+>>>>>>> Update unload, add sounds, compile Pyinstaller
     name_label.pack(side='top', fill='x')
     name_text = tk.Entry(root, font='Arial 12')
     name_text.pack(side='top', fill='x')
@@ -343,6 +526,16 @@ if __name__ == "__main__":
     create_new_user.configure(text='Новый пользователь', image=image_new_user, compound='left', font='14', command=creating_new_user)
     create_new_user.pack(side='top', fill='x')
     unload_button = tk.Button(root)
+<<<<<<< HEAD
     unload_button.configure(text='Выгрузить', compound='left', font='14', command=unload)
     unload_button.pack(side='top', fill='x')
+=======
+    unload_button.configure(text='Выгрузить выборочно', compound='left', font='14', command=unload)
+    unload_button.pack(side='top', fill='x')
+    unload_all_button = tk.Button(root)
+    unload_all_button.configure(text='Выгрузить всё', compound='left', font='14', command=unload_all)
+    unload_all_button.pack(side='top', fill='x')
+    mpb = ttk.Progressbar(root,orient ="horizontal",length = 200, mode ="determinate")
+    mpb.pack(side='top', fill='x')
+>>>>>>> Update unload, add sounds, compile Pyinstaller
     root.mainloop()
